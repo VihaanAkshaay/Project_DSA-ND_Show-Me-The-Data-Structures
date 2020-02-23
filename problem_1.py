@@ -5,40 +5,39 @@ from collections import OrderedDict
 class LRU_Cache(object):
     def __init__(self, capacity):
         # Initialize class variables
-        self.cache = OrderedDict()
-        self.capacity = capacity
+	self.cap = capacity
+        self.cache_dict = OrderedDict()
 
     def get(self, key):
         # Retrieve item from provided key. Return -1 if nonexistent.
 
-        try:  # If value in the cache
+        if key in self.cache_dict:  # If value in the cache
 
-            # Update priority due to access
-            value = self.cache.pop(key)
-            self.cache[key] = value
+            value = self.cache_dict.pop(key)
+            self.cache_dict[key] = value  # Removing and adding values to update order in the ordered dictionary
             return value
 
-        except KeyError:
+        else:
             return -1
 
     def set(self, key, value):
         # Set the value if the key is not present in the cache. If the cache is at capacity remove the oldest item.
 
-        if self.capacity == 0:
+        if self.cap == 0:
             print("Can't perform operations on 0 capacity cache")
-            return
+            return 0
 
-        if key in self.cache:  # Update priority due to access
-            self.cache.pop(key)
-            self.cache[key] = value
+        if key in self.cache_dict:  # Update priority order due to access
+            self.cache_dict.pop(key)
+            self.cache_dict[key] = value
 
         else:  # Add to cache
-            if len(self.cache) < self.capacity:  # Still space on cache
-                self.cache[key] = value
+            if len(self.cache_dict) < self.cap:  # Still space on cache
+                self.cache_dict[key] = value
 
             else:  # No space available on cache
-                self.cache.popitem(last=False)
-                self.cache[key] = value
+                self.cache_dict.popitem(last=False)
+                self.cache_dict[key] = value
 
 '''
 For testing'''
@@ -48,7 +47,6 @@ our_cache.set(1, 1);
 our_cache.set(2, 2);
 our_cache.set(3, 3);
 our_cache.set(4, 4);
-
 
 print(our_cache.get(1))       # returns 1
 print(our_cache.get(2))       # returns 2
