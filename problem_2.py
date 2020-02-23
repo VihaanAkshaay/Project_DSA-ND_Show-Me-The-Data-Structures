@@ -31,8 +31,7 @@ def find_files(suffix, path):
 
     return path_files
 
-#Preparation for testing
+#For testing
 path_base = os.getcwd() + '/testdir/'
 
-#Normal Cases:
 print(find_files(suffix='c',path = path_base))
