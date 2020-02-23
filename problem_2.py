@@ -35,3 +35,6 @@ def find_files(suffix, path):
 path_base = os.getcwd() + '/testdir/'
 
 print(find_files(suffix='c',path = path_base))
+#For more examples, we can use '.h' from the example list
+
+print(find_files(suffix='h',path = path_base))
