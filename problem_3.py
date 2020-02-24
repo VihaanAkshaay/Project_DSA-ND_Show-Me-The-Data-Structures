@@ -1,7 +1,8 @@
 import sys
+import time
 
 class Node:
-    def __init__(self, char = None, freq = None):
+    def __init__(self, freq, char = None):
         self.freq = freq
         self.char = char
         self.left = None
@@ -14,10 +15,10 @@ def huffman_encoding(data):
 
     frequency = {}
     for char in data:
-        frequency[char] = frequency.get(char) +1
+        frequency[char] = frequency.get(char,0) +1
     if len(frequency)<2:
         if data == "":
-            return "0"
+            return "0", Node(1,"")
         else:
             return encode(data,generate_huffman_code(Node(1,data[0]))), Node(1,data[0])
 
@@ -52,7 +53,7 @@ def huffman_encoding(data):
                 parent_node.right = node_1
                 nodes[parent_node.char] = parent_node
                 nodes.pop(node_0.char)
-                nodes.pop(nodes_1.char)
+                nodes.pop(node_1.char)
                 node_0 = None
                 node_1 = None
                 change_priority = False
@@ -70,13 +71,13 @@ def huffman_encoding(data):
 def generate_huffman_code(node, code = ""):
     encoding = {}
     if node:
-        if not (node.left or node_right):
+        if not (node.left or node.right):
             if code =="":  #where only one letter is present
                 encoding.update({node.char: "0"})
             else:
                 encoding.update({node.char: code})
         encoding.update(generate_huffman_code(node.left,code + "0"))
-        encoding.update(generate_huffman_code((node.right,code + "1")))
+        encoding.update(generate_huffman_code(node.right,code + "1"))
     return encoding
 
 def encode(data,encoding):
@@ -90,8 +91,8 @@ def huffman_decoding(data,tree):
     encoding = generate_huffman_reverse_code(tree)
     decoded_message = ""
     code = ""
-    for c in data:
-        code += c
+    for ch in data:
+        code += ch
         if code in encoding:
             decoded_message += encoding[code]
             code = ""
@@ -101,7 +102,7 @@ def generate_huffman_reverse_code(node , code = ""):
     encoding = {}
     if node:
         if not (node.left or node.right):
-            if code == "":
+            if code == "": #Case of having only one letter
                 encoding.update({"0:node.char})"})
             else:
                 encoding.update({code: node.char})
@@ -109,9 +110,6 @@ def generate_huffman_reverse_code(node , code = ""):
         encoding.update(generate_huffman_reverse_code(node.left, code+ "1"))
     return encoding
 
-    pass
-
-def huffman_decoding(data,tree):
     pass
 
 if __name__ == "__main__":
