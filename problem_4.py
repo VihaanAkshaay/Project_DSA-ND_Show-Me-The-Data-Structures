@@ -38,12 +38,17 @@ def is_user_in_group(user, group):
       user(str): user name/id
       group(class:Group): group to check user membership against
     """
-    if user in group.get_users():
+    if user in group.get_users():  # User found
         return True
+    else:
+        if len(group.get_groups()) == 0:  # Keep searching
+            return False
+        else:
+            for sub_group in group.get_groups():
+                found = is_user_in_group(user, sub_group)
 
-    for group_inside in group.get_groups():
-        if is_user_in_group(user,group_inside):
-            return True
+                if found:
+                    return True
     return False
 
 parent = Group("parent")
@@ -112,3 +117,30 @@ print("Pass" if is_user_in_group("User", empty_group)== False else "Fail")
 print('------------------------------------------')
 
 
+#%% Some more test cases
+# Testing preparation
+parent = Group("parent")
+child = Group("child")
+sub_child = Group("subchild")
+
+sub_child_user = "sub_child_user"
+sub_child.add_user(sub_child_user)
+
+child.add_group(sub_child)
+parent.add_group(child)
+
+# Normal Cases:
+print('Normal Cases:')
+print(is_user_in_group(user='parent_user', group=parent))
+# False
+print(is_user_in_group(user='child_user', group=parent))
+# False
+print(is_user_in_group(user='sub_child_user', group=parent), '\n')
+# True
+
+# Edge Cases:
+print('Edge Cases:')
+print(is_user_in_group(user='', group=parent))
+# False
+print(is_user_in_group(user='', group=child))
+# False

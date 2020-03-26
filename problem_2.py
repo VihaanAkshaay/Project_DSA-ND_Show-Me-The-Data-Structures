@@ -31,10 +31,20 @@ def find_files(suffix, path):
 
     return path_files
 
-#For testing
-path_base = os.getcwd() + '/testdir/'
+#%% Testing official
+# Testing preparation
+path_base = os.getcwd() + '/testdir'
 
-print(find_files(suffix='c',path = path_base))
-#For more examples, we can use '.h' from the example list
+# Normal Cases:
+print(find_files(suffix='c', path=path_base))
+# ['t1.c', 'a.c', 'a.c', 'b.c']
 
-print(find_files(suffix='h',path = path_base))
+print(find_files(suffix='h', path=path_base))
+# ['t1.h', 'a.h', 'a.h', 'b.h']
+
+print(find_files(suffix='z', path=path_base))
+# []
+
+# Edge Cases:
+print(find_files(suffix='', path=path_base))
+# []
